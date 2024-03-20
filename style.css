@@ -1,0 +1,17 @@
+@import "node_modules/ol/ol.css";
+
+html, body {
+  margin: 0;
+  height: 80%;
+}
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80%;
+}
+
+#locationButton {
+  position: absolute;
+  right: 0;  
+}
