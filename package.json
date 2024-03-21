@@ -7,12 +7,12 @@
     "serve": "vite preview"
   },
   "devDependencies": {
-    "vite": "^5.1.6",
     "checkly": "latest",
     "ts-node": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vite": "^5.1.6"
   },
   "dependencies": {
-    "ol": "latest"
+    "ol": "^9.0.0"
   }
 }

@@ -1,4 +1,6 @@
 import './style.css';
+import * as ol from 'ol';
+import { buffer } from 'ol/extent';
 import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
@@ -9,7 +11,7 @@ import { Vector as VectorSource } from 'ol/source';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 
-const map = new Map({
+const map = new ol.Map({
   target: 'map',
   layers: [
     new TileLayer({
@@ -22,9 +24,23 @@ const map = new Map({
   }),
 });
 
-const locationButton = document.getElementById('locationButton');
+const show10KmButton = document.getElementById('show10KmButton');
+const show20KmButton = document.getElementById('show20KmButton');
+const show100KmButton = document.getElementById('show100KmButton');
 
-locationButton.addEventListener('click', function () {
+show10KmButton.addEventListener('click', function () {
+  showPointsWithinRadius(10);
+});
+
+show20KmButton.addEventListener('click', function () {
+  showPointsWithinRadius(20);
+});
+
+show100KmButton.addEventListener('click', function () {
+  showPointsWithinRadius(100);
+});
+
+function showPointsWithinRadius(radius) {
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(function (position) {
       const latitude = position.coords.latitude;
@@ -51,9 +67,9 @@ locationButton.addEventListener('click', function () {
 
       map.getView().setCenter(fromLonLat([longitude, latitude]));
 
-      const radius = 10 * 1000;
+      const radiusInMeters = radius * 1000;
       const boundingExtent = userLocation.getGeometry().getExtent();
-      const bufferedExtent = ol.extent.buffer(boundingExtent, radius);
+      const bufferedExtent = buffer(boundingExtent, radiusInMeters);
 
       const pointsWithinRadiusLayer = new VectorLayer({
         source: new VectorSource({
@@ -75,4 +91,4 @@ locationButton.addEventListener('click', function () {
   } else {
     alert('Geolocation is not supported by your browser.');
   }
-});
+};
