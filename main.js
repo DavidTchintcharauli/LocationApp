@@ -50,6 +50,27 @@ locationButton.addEventListener('click', function () {
       map.addLayer(userLocationLayer);
 
       map.getView().setCenter(fromLonLat([longitude, latitude]));
+
+      const radius = 10 * 1000;
+      const boundingExtent = userLocation.getGeometry().getExtent();
+      const bufferedExtent = ol.extent.buffer(boundingExtent, radius);
+
+      const pointsWithinRadiusLayer = new VectorLayer({
+        source: new VectorSource({
+          features: [],
+        }),
+        style: new Style({
+          image: new CircleStyle({
+            radius: 6,
+            fill: new Fill({ color: 'red' }),
+            stroke: new Stroke({ color: 'white', width: 2 }),
+          }),
+        }),
+      });
+
+      map.addLayer(pointsWithinRadiusLayer);
+
+      map.getView().fit(bufferedExtent);
     });
   } else {
     alert('Geolocation is not supported by your browser.');
